@@ -1,6 +1,15 @@
 #!/usr/bin/env python
+# -*- coding=utf-8 -*-
 
 from reverend.thomas import Bayes
+from crfseg import Tagger
+
+class Tokenizer:
+    crf_tagger = Tagger()
+
+    def tokenize(self, text):
+        for c in self.crf_tagger.cut(text):
+            yield c
 
 class AIMLBayes(Bayes):
   """
@@ -13,7 +22,7 @@ class AIMLBayes(Bayes):
   Duncan Gough 11/01/09
   """
   def __init__(self,name):
-    Bayes.__init__(self)
+    Bayes.__init__(self, tokenizer = Tokenizer())
 
     self.brain = name + '.bay'
 
@@ -62,4 +71,10 @@ class AIMLBayes(Bayes):
     Bayes.save(self,self.brain)
 
 if __name__ == "__main__":
-  AIMLBayes()
+  bay = AIMLBayes('bay_test')
+  bay.train('天气', '今天天气不错')
+  bay.train('天气', '太阳都出来了')
+  bay.train('水果', '水果真好吃')
+  bay.train('水果', '看来这个苹果也出来了')
+  print bay.guess('出来')[1][0]
+
