@@ -121,7 +121,7 @@ class AIMLBot:
           #print 'reply 118'
           self.on_UNKNOWN(sn,line)
       except:       
-        #print 'reply 121'
+        print 'reply 121'
         self.on_UNKNOWN(sn,line)
 
   def on_FORGET(self,sn,line):
@@ -140,15 +140,15 @@ class AIMLBot:
     Main method called in reponse to an incoming message
     """
     line,sn = self.parse_msg(data,sn)
-    #print 'line', line
-    #print 'sn', sn
+    print 'line', line
+    print 'sn', sn
 
     guess = self.guess(line)
-    #print 'guess', guess
+    print 'guess', guess
     topic = self.kernel.getPredicate("topic",sn)
-    #print 'topic', topic
+    print 'topic', topic
     handler = self.kernel.getPredicate("handler",sn)
-    #print 'handler', handler
+    print 'handler', handler
 
     # Order of relevance:
     # 1. Handler set by AIML (mainly used for training)
