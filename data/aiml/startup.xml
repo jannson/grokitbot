@@ -22,7 +22,7 @@ Interpreter Version Info: <version/>
         <!-- Load some key files to integrate AIMLBot with AIMLBayes -->
         <learn>data/aiml/*.aiml</learn>
     </li>
-    <li>You are not permitted to load AIML sets.</li>
+	<li>You are not permitted to load AIML sets. <get name="secure"/></li>
 </condition>
 </template>
 </category>

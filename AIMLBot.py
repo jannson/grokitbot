@@ -39,13 +39,14 @@ class AIMLBot:
     self.typerate = 0.05
     
     self._dir = dir(self)
+    #print self._dir
 
     # Initialize the AIML interpreter  
     self.kernel = aiml.Kernel()
     self.kernel.verbose(1)
     self.kernel.setPredicate("secure", "yes") # secure the global session
     self.kernel.bootstrap(learnFiles="data/aiml/startup.xml", commands="bootstrap")
-    self.kernel.setPredicate("secure", "no") # and unsecure it.
+    #self.kernel.setPredicate("secure", "no") # and unsecure it.
     self.kernel.setBotPredicate("name",name)
 
     # Initialise the Bayes parser
@@ -73,6 +74,7 @@ class AIMLBot:
     Returns the response from the AIML parser
     """
     try:
+      #print 'hear fetch aiml'
       return self.kernel.respond(line,sn)
     except:
       return None
@@ -98,11 +100,13 @@ class AIMLBot:
         print "[Topic] %s" % topic
         self.kernel.setPredicate("topic",topic,sn)
         reply = self.fetch_aiml_response(line,sn)
+        #print '\nfetch aiml response: %s\n' % reply
         if reply:
           self.do_RESPONSE(sn,reply)
         else:
           self.on_UNKNOWN(sn,line)
-      except:       
+      except:
+        #print 'reply 109'
         self.on_UNKNOWN(sn,line)
     else:
       try:
@@ -111,10 +115,13 @@ class AIMLBot:
         self.kernel.setPredicate("topic",topic,sn)
         reply = self.fetch_aiml_response(line,sn)
         if reply:
+          #print 'reply 116'
           self.do_RESPONSE(sn,reply)
         else:
+          #print 'reply 118'
           self.on_UNKNOWN(sn,line)
       except:       
+        #print 'reply 121'
         self.on_UNKNOWN(sn,line)
 
   def on_FORGET(self,sn,line):
@@ -133,17 +140,21 @@ class AIMLBot:
     Main method called in reponse to an incoming message
     """
     line,sn = self.parse_msg(data,sn)
+    #print 'line', line
+    #print 'sn', sn
 
     guess = self.guess(line)
+    #print 'guess', guess
     topic = self.kernel.getPredicate("topic",sn)
+    #print 'topic', topic
     handler = self.kernel.getPredicate("handler",sn)
+    #print 'handler', handler
 
     # Order of relevance:
     # 1. Handler set by AIML (mainly used for training)
     # 2. Bayesian guess (whether the topic agrees or not)
     # 3. Persistent topic
     # 4. Ask for help
-
     if ("on_%s" % handler ) in self._dir:
       # Handle further implementations (borrowed from PyTOC in the old GrokItBot code)
       print "[Handler] %s" % handler
@@ -197,6 +208,7 @@ class AIMLBot:
     """
     Causes the bot to reload its' AIML files
     """
+    #print 'hear RELOAD?'
     reply = self.fetch_aiml_response(line,sn)
     self.do_RESPONSE(sn,reply)
 
